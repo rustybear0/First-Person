@@ -1,0 +1,34 @@
+local Camera = workspace.CurrentCamera
+local Player = game.Players.LocalPlayer
+local Character = Player.Character or Player.CharacterAdded:Wait()
+local Humanoid = Character.Humanoid
+
+Humanoid.CameraOffset = Vector3.new(0,0,-1)
+for _, v in pairs(Character:GetChildren()) do
+	if v:IsA("Part") and v.Name ~= "Head" then
+		
+		v:GetPropertyChangedSignal("LocalTransparencyModifier"):Connect(function()
+			v.LocalTransparencyModifier = v.Transparency
+		end)
+		
+		v.LocalTransparencyModifier = v.Transparency
+	end
+end
+
+function UpdateBobble()
+	local CurrentTime = tick()
+	if Humanoid.MoveDirection.Magnitude > 0 then --Magnitude is the distance from 0, so if the players magnitude is higher than 0, then they are moving
+		local BobbleX = math.cos(CurrentTime * 6) * .15 --25 is amount that bobbles, currenttime * 5 is how fast it bobbles
+		local BobbleY = math.abs(math.sin(CurrentTime * 6)) * 0.35 --same thing but on the y axis
+		local Bobble = Vector3.new(BobbleX,BobbleY,-1)
+		
+		Humanoid.CameraOffset = Humanoid.CameraOffset:lerp(Bobble,.25)
+	else --Magnitude = 0, thus player isnt moving
+		Humanoid.CameraOffset = (Humanoid.CameraOffset * .75) - Vector3.new(0,0,0.25)
+	end
+end
+
+local RunService = game:GetService("RunService")
+RunService.RenderStepped:Connect(UpdateBobble)
+
+
