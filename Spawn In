@@ -1,0 +1,6 @@
+local Player = game.Players.LocalPlayer
+local Lighting = game.Lighting
+Lighting.ColorCorrection.Brightness = -1
+ 
+local TweenFade = game.TweenService:Create(Lighting.ColorCorrection,TweenInfo.new(2,Enum.EasingStyle.Sine),{Brightness = 0})
+TweenFade:Play()
